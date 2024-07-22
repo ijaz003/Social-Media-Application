@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Reset</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            width: 350px;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            width: 100%;
+            background-color: #007bff;
+            color: #fff;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Password Reset</h2>
+        <form id="passwordResetForm">
+            <div class="form-group">
+                <label for="password">New Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+            </div>
+            <button type="button" class="btn" onclick="resetPassword()">Reset Password</button>
+        </form>
+    </div>
+
+    <script>
+        const parameter = new URLSearchParams(window.location.search);
+        const email = parameter.get('email');
+
+        function resetPassword() {
+            const passwordInput = document.querySelector("#password");
+            const confirmPasswordInput = document.querySelector("#confirmPassword");
+            const Password = passwordInput.value;
+            const ConfirmPassword = confirmPasswordInput.value;
+
+            fetch(`http://localhost:5000/new-password`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "password": Password,
+                    "confirmPassword": ConfirmPassword,
+                    "email": email
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    return response.json().then(data => {
+                        throw new Error(data.error);
+                    });
+                }
+            })
+            .then(data => {
+                alert(data.data);
+                console.log(data);
+                passwordInput.value = "";
+                confirmPasswordInput.value = "";
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        }
+    </script>
+</body>
+</html>
