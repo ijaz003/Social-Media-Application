@@ -12,6 +12,7 @@ import Profile from './components/Profile/Profile.jsx'
 import ForgotPassword from './components/ForgotPassword.jsx'
 import CreatePost from './components/CreatePost/CreatePost.jsx'
 import AuthLayout from "./components/AuthLayout.jsx"
+import ProfileEdit from './components/ProfileEdit.jsx'
 
 const router = createBrowserRouter([
   {
@@ -64,6 +65,14 @@ const router = createBrowserRouter([
           <AuthLayout>
             <CreatePost />
           </AuthLayout>
+        )
+      },
+      {
+        path:"/profile-edit",
+        element:(
+          <AuthLayout>
+            <ProfileEdit />
+            </AuthLayout>
         )
       }
     ]

@@ -21,6 +21,31 @@ class Service {
         }
     }
 
+    async getUserData(token) {
+      try {
+        const response = await this.api.get("/getuser", {
+          headers: {
+            Authorization: token,
+          },
+        });
+        return response;
+      } catch (error) {
+        throw error.response;
+      }
+    }  
+    async updateProfile(formData,token){
+      try{
+        const response=this.api.post("/profile-edit",formData,{
+          headers:{
+            "Content-Type":"multipart/form-data",
+            Authorization:token
+          }
+        })
+      }
+      catch(error){
+        throw error.response
+      }
+    }
     async allPost() {
         try {
           const response = await this.api.get("/post", {});

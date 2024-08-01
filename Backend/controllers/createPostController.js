@@ -16,6 +16,9 @@ const createPostController = async (req, res) => {
             userId: data._id,
             caption: caption,
             name: data.name,
+            comment:[],
+            like:0,
+            
         });
         await newPost.save();
         res.status(200).json({ message: 'Data Enter successfully' });

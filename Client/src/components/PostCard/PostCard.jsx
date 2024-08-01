@@ -3,7 +3,7 @@ import { FaThumbsUp, FaRegThumbsUp, FaComment } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 
-const PostCard = ({ username, timestamp, caption, imageUrl, likes = 0, comments = [] }) => {
+const PostCard = ({ username, timestamp, caption, imageUrl, likes = 0, comments = []},...props) => {
   const [likesCount, setLikesCount] = useState(likes);
   const [isLiked, setIsLiked] = useState(false);
   const [commentsList, setCommentsList] = useState(comments);
