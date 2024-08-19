@@ -29,7 +29,7 @@ const ProfileEdit = async (req, res) => {
     );
 
     // Send response
-    res.send({ message: "Profile updated successfully", data });
+    res.status(200).send({message:"Profile update successfully"})
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Error updating profile", error });

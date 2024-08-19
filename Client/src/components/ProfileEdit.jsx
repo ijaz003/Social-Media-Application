@@ -1,51 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaUpload, FaSave } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import service from '../BackEndServices/confi';
+import { useNavigate } from 'react-router-dom';
+import { ToastSuccess } from './Toasts/Toast';
+
 
 const ProfileEdit = () => {
-  const userData=useSelector(state=>state.auth.userData);
-  // console.log(userData)
+  const navigate=useNavigate();
+  const userData = useSelector(state => state.auth.userData);
   const [image, setImage] = useState(null);
-  const [name, setName] = useState('');
-  const [bio, setBio] = useState('');
+  const [name, setName] = useState(userData.name || '');
+  const [bio, setBio] = useState(userData.bio || '');
+  const [visibility,setVisibility]=useState(false);
+  useEffect(() => {
+    setName(userData.name || '');
+    setBio(userData.bio || '');
+  }, [userData]);
 
   const handlePhotoChange = (e) => {
-    e.preventDefault();
-    setImage(e.target.files[0])
+    setImage(e.target.files[0]);
   };
 
-
-  const handleUpdate = async() => {
-    // Handle the update logic here
-    try{
-      const formData=new FormData();
-    formData.append("image",image);
-    formData.append("bio",bio);
-    formData.append("name",name);
-    const token=localStorage.getItem("token");
-
-    await service.updateProfile(formData,token).then(res => {
-      if (res.statusText === "OK") {
-        alert(res.data.message)
-      }
-    })
-    setImage(null);
-    setName("");
-    bio("");
-    }
-    catch(error){
-      alert(error.message || error.error)
+  const handleUpdate = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("image", image);
+      formData.append("bio", bio);
+      formData.append("name", name);
+      const token = localStorage.getItem("token");
+      const res = await service.updateProfile(formData, token);
+      setVisibility(true);
+      setTimeout(() => {
+        setVisibility(false);
+        navigate("/profile")
+      }, 3000);
+      
+      setImage(null);
+      setName(userData.name || '');
+      setBio(userData.bio || '');
+    } catch (error) {
+      alert(error.message || error.error);
     }
   };
 
   return (
     <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg p-6">
+      {visibility?<ToastSuccess message="Profile Update successfully"/>:null}
       <div className="flex flex-col items-center">
         <div className="relative">
           <img
             className="w-32 h-32 object-cover rounded-full border-4 border-gray-200"
-            src={image?URL.createObjectURL(image):userData.profileImage}
+            src={image ? URL.createObjectURL(image) : userData.profileImage}
             alt="Profile"
           />
           <label
@@ -64,7 +70,7 @@ const ProfileEdit = () => {
         <input
           type="text"
           value={name}
-          onChange={(e)=>setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
           className="mt-4 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Enter your name"
         />

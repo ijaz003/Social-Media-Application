@@ -7,12 +7,17 @@ import authService from '../../BackEndServices/auth'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { login } from '../../store/authSlice'
+import {ToastError} from '../Toasts/Toast'
+import { ToastSuccess } from '../Toasts/Toast'
 
 function SignIn() {
   const [email,setEmail]=useState("");
   const [password,setPassword]=useState("");
   const navigate=useNavigate();
-  const dispatch=useDispatch()
+  const dispatch=useDispatch();
+  const [visibility,setVisibility]=useState(false);
+  const [error,setError]=useState("")
+  const [successVisibility,setSuccessVisibility]=useState(false);
 
   
   const handleSubmit = async (e) => {
@@ -25,18 +30,26 @@ function SignIn() {
         const userData=resp.data.userData;
         localStorage.setItem("token",JSON.stringify({token:resp.data.token}))
         dispatch(login({ userData }))
-
-        alert("Login Successfully");
+        setSuccessVisibility(true);
+        setTimeout(()=>{
+          setSuccessVisibility(false);
+        },3000)
         navigate("/home")
       }
     } catch (error) {
       console.error("Signin error:", error.error);
-      alert(error.message || error.error)
+      setVisibility(true);
+      setError(error.message || error.error);
+      setTimeout(() => {
+        setVisibility(false);
+      }, 3000);
     }
   };
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+      {visibility?<ToastError message={error}/>:null};
+      {successVisibility?<ToastSuccess message="Login Successfully"/>:null};
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
           Sign in to your account
