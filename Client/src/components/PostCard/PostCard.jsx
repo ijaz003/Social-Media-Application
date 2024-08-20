@@ -3,7 +3,7 @@ import { FaThumbsUp, FaRegThumbsUp, FaComment } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 
-const PostCard = ({ username, timestamp, caption, imageUrl, likes = 0, comments = []},...props) => {
+const PostCard = ({ username, timestamp, caption, imageUrl, likes = 0, comments = [],profileImage},...props) => {
   const [likesCount, setLikesCount] = useState(likes);
   const [isLiked, setIsLiked] = useState(false);
   const [commentsList, setCommentsList] = useState(comments);
@@ -26,7 +26,7 @@ const PostCard = ({ username, timestamp, caption, imageUrl, likes = 0, comments 
       <div className="flex items-center mb-4">
         <Link to='/profile'>
         <img
-          src="https://via.placeholder.com/150" // Replace with profile image URL if available
+          src={profileImage} // Replace with profile image URL if available
           alt="Profile"
           className="rounded-full h-10 w-10 mr-3"
         />

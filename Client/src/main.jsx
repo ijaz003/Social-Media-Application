@@ -13,6 +13,7 @@ import ForgotPassword from './components/ForgotPassword.jsx'
 import CreatePost from './components/CreatePost/CreatePost.jsx'
 import AuthLayout from "./components/AuthLayout.jsx"
 import ProfileEdit from './components/ProfileEdit.jsx'
+import Chat from "./components/Chat/Chat.jsx"
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,14 @@ const router = createBrowserRouter([
         element: (
           <AuthLayout>
             <Profile />
+          </AuthLayout>
+        )
+      },
+      {
+        path: "/message",
+        element: (
+          <AuthLayout>
+            <Chat />
           </AuthLayout>
         )
       },

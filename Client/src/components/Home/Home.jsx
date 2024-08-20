@@ -11,6 +11,7 @@ const Home = () => {
       try {
         const data = await service.allPost();
         setAllPost(data);
+
       } catch (error) {
         console.error('Error fetching posts:', error);
       }
@@ -28,6 +29,7 @@ const Home = () => {
             username={post.name}
             caption={post.caption}
             imageUrl={post.imageUrl}
+            profileImage={post.profileImage}
           />
         ))
       }

@@ -2,14 +2,18 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../store/authSlice';
 import { useDispatch } from 'react-redux';
+import socket from '../socket';
+import { useSelector } from 'react-redux';
 
 function LogoutBtn() {
     const navigate=useNavigate();
     const dispatch = useDispatch();
+    const userData=useSelector(state=>state.auth.userData)
 
     const logoutHandle = () => {
         dispatch(logout());
         localStorage.removeItem("token")
+        socket.emit("removeUser",userData._id)
         navigate('/signin')
     }
 
